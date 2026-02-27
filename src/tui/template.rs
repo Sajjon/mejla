@@ -4,7 +4,11 @@ use crate::{Template, TemplatePart};
 
 use super::{Error, Result};
 
-fn ask_for_template_part(part: &str, default: &TemplatePart, tutorial: &str) -> Result<TemplatePart> {
+fn ask_for_template_part(
+    part: &str,
+    default: &TemplatePart,
+    tutorial: &str,
+) -> Result<TemplatePart> {
     CustomType::<TemplatePart>::new(&format!("Email template for {}", part))
         .with_help_message(tutorial)
         .with_default(default.clone())

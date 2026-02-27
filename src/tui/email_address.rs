@@ -37,7 +37,10 @@ pub fn ask_for_email_address_skippable(
     result.map_err(Error::invalid_email_address_for_role(role))
 }
 
-pub fn ask_for_email_address(role: EmailAddressRole, default: &EmailAddress) -> Result<EmailAddress> {
+pub fn ask_for_email_address(
+    role: EmailAddressRole,
+    default: &EmailAddress,
+) -> Result<EmailAddress> {
     CustomType::<EmailAddress>::new(&format!("{}'s email address?", role))
         .with_help_message(&format!("Email address for {}", role))
         .with_default(default.clone())

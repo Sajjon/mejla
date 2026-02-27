@@ -6,7 +6,10 @@ use super::{
     format_help_skippable,
 };
 
-pub fn ask_for_email_account(role: EmailAddressRole, default: &EmailAccount) -> Result<EmailAccount> {
+pub fn ask_for_email_account(
+    role: EmailAddressRole,
+    default: &EmailAccount,
+) -> Result<EmailAccount> {
     let name = Text::new(&format!("Email account {} name?", role))
         .with_help_message(&format!("Will show up as the {} name", role))
         .with_default(default.name())
