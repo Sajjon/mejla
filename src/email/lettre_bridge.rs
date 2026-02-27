@@ -1,13 +1,15 @@
+use std::fmt::{Display, Formatter};
+
+use bon::Builder;
+use getset::Getters;
 use lettre::{
-    Message,
+    Message, SmtpTransport, Transport,
     message::{Mailbox, MultiPart, SinglePart, header::ContentType},
-    transport::smtp::authentication::Credentials,
+    transport::smtp::{authentication::Credentials, response::Response},
 };
 use secrecy::ExposeSecret;
 
 use crate::{Attachment, Email, EmailAccount, EmailAddress, EmailCredentials};
-use bon::Builder;
-use getset::Getters;
 
 /// Ephemeral helper struct to hold an email and sender while building `lettre::Message`.
 #[derive(Debug, Clone, Builder, Getters)]
@@ -17,6 +19,52 @@ pub struct EmailWithSender {
 
     #[getset(get = "pub")]
     sender: EmailAccount,
+}
+
+#[derive(Debug)]
+pub enum SendEmailError {
+    CreateEmail(lettre::error::Error),
+    CreateSmtpTransport(lettre::transport::smtp::Error),
+    SendEmail(lettre::transport::smtp::Error),
+}
+
+impl Display for SendEmailError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::CreateEmail(error) => {
+                write!(f, "failed to create email message: {error}")
+            }
+            Self::CreateSmtpTransport(error) => {
+                write!(f, "failed to create SMTP transport: {error}")
+            }
+            Self::SendEmail(error) => {
+                write!(f, "failed to send email: {error}")
+            }
+        }
+    }
+}
+
+impl std::error::Error for SendEmailError {}
+
+pub fn send_email_with_credentials(
+    email: Email,
+    credentials: EmailCredentials,
+) -> Result<Response, SendEmailError> {
+    let email_with_sender = EmailWithSender::builder()
+        .email(email)
+        .sender(credentials.account().clone())
+        .build();
+    let email = Message::try_from(email_with_sender).map_err(SendEmailError::CreateEmail)?;
+
+    let smtp_server = credentials.smtp_server().clone();
+    let creds = Credentials::from(credentials);
+
+    let mailer = SmtpTransport::relay(smtp_server.as_ref())
+        .map_err(SendEmailError::CreateSmtpTransport)?
+        .credentials(creds)
+        .build();
+
+    mailer.send(&email).map_err(SendEmailError::SendEmail)
 }
 
 trait CommonContentType: Sized {
