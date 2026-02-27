@@ -1,6 +1,6 @@
 [package]
 name = "mejla"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2024"
 rust-version = "1.85.1"
 description = "Send emails using the SMTP protocol, with support for encryption of locally saved smtp app password."
