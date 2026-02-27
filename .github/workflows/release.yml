@@ -7,7 +7,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  RUST_TOOLCHAIN: 1.85.1
+  RUST_TOOLCHAIN: 1.93
 
 jobs:
   spelling:
