@@ -1,0 +1,35 @@
+fail_fast: true
+default_install_hook_types: [pre-commit]
+default_stages: [pre-commit]
+repos:
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.42.3
+    hooks:
+      - id: typos
+
+  - repo: local
+    hooks:
+      - id: fmt
+        name: fmt
+        language: system
+        types: [file, rust]
+        entry: cargo fmt --all -- --check
+        pass_filenames: false
+      - id: clippy
+        name: clippy
+        language: system
+        types: [file, rust]
+        entry: cargo clippy --all-targets --all-features -- -D warnings
+        pass_filenames: false
+      - id: doc-tests
+        name: doc tests
+        language: system
+        types: [file, rust]
+        entry: cargo test --doc --locked --all-features
+        pass_filenames: false
+      - id: unit-tests
+        name: unit tests
+        language: system
+        types: [file, rust]
+        entry: cargo test --locked --all-features -- --test-threads=1
+        pass_filenames: false

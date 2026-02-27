@@ -1,0 +1,5 @@
+.envrc.secret
+/target
+invoices/**
+tarpaulin-report.html
+/mejla/

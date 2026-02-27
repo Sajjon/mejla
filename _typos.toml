@@ -1,0 +1,9 @@
+[files]
+extend-exclude = [
+  "target/**",
+]
+
+[default.extend-words]
+typ = "typ"
+cheduling = "cheduling"
+utomatic = "utomatic"

@@ -1,0 +1,31 @@
+[package]
+name = "mejla"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85.1"
+description = "Send emails using the SMTP protocol, with support for encryption of locally saved smtp app password."
+license = "MIT"
+
+[features]
+default = []
+tui = ["dep:inquire", "dep:rpassword", "dep:log", "dep:thiserror"]
+
+[dependencies]
+aes-gcm = { version = "=0.10.3", default-features = false, features = ["aes", "alloc", "getrandom", "zeroize"] }
+bon = "3.6.4"
+derive_more = { version = "2.0.1", features = ["full"] }
+getset = { version = "0.1.4", default-features = false, features = [] }
+hex = "0.4.3"
+hkdf = { version = "=0.12.4", default-features = false }
+indexmap = { version = "2.9.0", features = ["serde"] }
+inquire = { version = "0.7.5", optional = true }
+lettre = { version = "0.11", default-features = false, features = ["tokio1-rustls-tls", "smtp-transport", "builder"] }
+log = { version = "0.4.27", optional = true }
+rand = "0.9.1"
+rpassword = { version = "7.4.0", optional = true }
+secrecy = "0.10.3"
+serde = { version = "1", features = ["derive"] }
+serde_with = { version = "3.9", features = ["hex"] }
+sha2 = "0.10.9"
+thiserror = { version = "2.0.12", optional = true }
+zeroize = { version = "1.7.0", default-features = false, features = ["zeroize_derive", "derive"] }

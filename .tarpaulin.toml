@@ -1,0 +1,11 @@
+[all]
+exclude-files = [
+  "src/email/lettre_bridge.rs",
+  "src/tui/**",
+]
+verbose = false
+timeout = "2m"
+locked = true
+all-features = true
+jobs = 1
+out = ["Html", "Xml"]
